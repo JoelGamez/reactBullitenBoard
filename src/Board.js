@@ -13,11 +13,13 @@ class Board extends Component{
     this.remove = this.remove.bind(this)
     this.add = this.add.bind(this)
     this.nextId = this.nextId.bind(this)
+    this.eraseAllNotes = this.eraseAllNotes.bind(this)
   }
 
   componentWillMount() {
   		var self = this
   		if(this.props.count) {
+
   			fetch(`https://baconipsum.com/api/?type=all-meat&sentences=${this.props.count}`)
   				.then(response => response.json())
   				.then(json => json[0]
@@ -38,6 +40,13 @@ class Board extends Component{
     }))
   }
 
+  eraseAllNotes(){
+    this.setState({notes: []})
+    }
+
+
+
+
   nextId(){
     this.uniqueId = this.uniqueId || 0
     return this.uniqueId++
@@ -56,7 +65,8 @@ class Board extends Component{
             index={note.id}
             onChange={this.update}
             onRemove={this.remove}>
-            {note.note}
+            {note.note} <br/>
+          -{note.id}
       </Note>
     )
   }
@@ -76,7 +86,9 @@ class Board extends Component{
     return (
       <div className='board'>
         {this.state.notes.map(this.eachNote)}
-        <button onClick={this.add.bind(null, "New Note")} id="add">ADD </button>
+        <button onClick={this.add.bind(null, "New Note")} id ='add'>ADD </button>
+        <button onClick={this.eraseAllNotes.bind(null, "Remove all")} id="remove">Remove all </button>
+
       </div>
     )
   }
